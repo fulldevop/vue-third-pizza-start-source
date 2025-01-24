@@ -43,7 +43,6 @@
 <style lang="scss" scoped>
 @import "@/assets/scss/ds-system/ds";
 
-//// header ////
 .header {
   position: relative;
   z-index: 2;
