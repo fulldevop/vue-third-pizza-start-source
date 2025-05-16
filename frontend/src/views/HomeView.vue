@@ -3,123 +3,9 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-
-        <div class="content__dough">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите тесто</h2>
-
-            <div class="sheet__content dough">
-              <label
-                v-for="dough in doughItems"
-                :key="dough.id"
-                :class="`dough__input dough__input--${dough.value}`"
-              >
-                <input
-                  type="radio"
-                  name="dough"
-                  value="light"
-                  class="visually-hidden"
-                  checked
-                />
-                <img :src="getImage(dough.image)" :alt="dough.name" />
-                <b>{{ dough.name }}</b>
-                <span>{{ dough.description }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="content__diameter">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-            <div class="sheet__content diameter">
-              <label
-                v-for="size in sizeItems"
-                :key="size.id"
-                :class="`diameter__input diameter__input--${size.value}`"
-              >
-                <input
-                  type="radio"
-                  name="diameter"
-                  :value="size.value"
-                  class="visually-hidden"
-                />
-                <span>{{ size.name }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="content__ingredients">
-          <div class="sheet">
-            <h2 class="title title--small sheet__title">
-              Выберите ингредиенты
-            </h2>
-
-            <div class="sheet__content ingredients">
-              <div class="ingredients__sauce">
-                <p>Основной соус:</p>
-
-                <label
-                  v-for="sauce in sauceItems"
-                  :key="sauce.id"
-                  class="radio ingredients__input"
-                >
-                  <input
-                    type="radio"
-                    name="sauce"
-                    :value="sauce.value"
-                    checked
-                  />
-                  <span>{{ sauce.name }}</span>
-                </label>
-              </div>
-
-              <div class="ingredients__filling">
-                <p>Начинка:</p>
-
-                <ul class="ingredients__list">
-                  <li
-                    v-for="ingredient in ingredientItems"
-                    :key="ingredient.id"
-                    class="ingredients__item"
-                  >
-                    <div :class="`filling filling--${ingredient.value}`">
-                      <img
-                        :src="getImage(ingredient.image)"
-                        alt="ingredient.name"
-                      />
-                      {{ ingredient.name }}
-                    </div>
-
-                    <div class="counter counter--orange ingredients__counter">
-                      <button
-                        type="button"
-                        class="counter__button counter__button--minus"
-                        disabled
-                      >
-                        <span class="visually-hidden">Меньше</span>
-                      </button>
-                      <input
-                        type="text"
-                        name="counter"
-                        class="counter__input"
-                        value="0"
-                      />
-                      <button
-                        type="button"
-                        class="counter__button counter__button--plus"
-                      >
-                        <span class="visually-hidden">Больше</span>
-                      </button>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <DoughSelector/>
+        <DiameterSelector/>
+        <IngredientsSelector/>
 
         <div class="content__pizza">
           <label class="input">
@@ -132,13 +18,9 @@
           </label>
 
           <div class="content__constructor">
-            <div class="pizza pizza--foundation--big-tomato">
-              <div class="pizza__wrapper">
-                <div class="pizza__filling pizza__filling--ananas"></div>
-                <div class="pizza__filling pizza__filling--bacon"></div>
-                <div class="pizza__filling pizza__filling--cheddar"></div>
-              </div>
-            </div>
+            <pizza-constructor
+              @drop="addIngredientOnPizza($event)"
+            />
           </div>
 
           <div class="content__result">
@@ -152,25 +34,24 @@
 </template>
 
 <script setup>
-import doughsJSON from "@/mocks/dough.json";
 import sizesJSON from "@/mocks/sizes.json";
 import saucesJSON from "@/mocks/sauces.json";
-import ingredientsJSON from "@/mocks/ingredients.json";
+import { getImage } from "@/common/helper";
 import {
-  normalizeDough,
   normalizeSize,
   normalizeSauce,
   normalizeIngredient,
 } from "@/common/normalize";
+import PizzaConstructor from "../modules/constructor/PizzaConstructor.vue";
+import ingredients from "../common/data/ingredients";
+import DoughSelector from "../modules/constructor/DoughSelector.vue";
+import DiameterSelector from "@/modules/constructor/DiameterSelector.vue";
+import IngredientsSelector from "@/modules/constructor/IngredientsSelector.vue";
 
-const doughItems = doughsJSON.map(normalizeDough);
-const sizeItems = sizesJSON.map(normalizeSize);
-const sauceItems = saucesJSON.map(normalizeSauce);
-const ingredientItems = ingredientsJSON.map(normalizeIngredient);
 
-const getImage = (image) => {
-  return new URL(`../assets/img/${image}`, import.meta.url).href;
-};
+function addIngredientOnPizza(ingredient) {
+
+}
 </script>
 
 <style lang="scss">
@@ -191,26 +72,6 @@ const getImage = (image) => {
   padding-right: 2.12%;
   padding-bottom: 30px;
   padding-left: 2.12%;
-}
-
-.content__dough {
-  width: 527px;
-  margin-top: 15px;
-  margin-right: auto;
-  margin-bottom: 15px;
-}
-
-.content__diameter {
-  width: 373px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.content__ingredients {
-  width: 527px;
-  margin-top: 15px;
-  margin-right: auto;
-  margin-bottom: 15px;
 }
 
 .content__pizza {
@@ -271,38 +132,7 @@ const getImage = (image) => {
   border-top: 1px solid rgba($green-500, 0.1);
 }
 
-.ingredients__sauce {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
 
-  width: 100%;
-  margin-bottom: 14px;
-
-  p {
-    @include r-s16-h19;
-
-    margin-top: 0;
-    margin-right: 16px;
-    margin-bottom: 10px;
-  }
-}
-
-.ingredients__input {
-  margin-right: 24px;
-  margin-bottom: 10px;
-}
-
-.ingredients__filling {
-  width: 100%;
-
-  p {
-    @include r-s16-h19;
-
-    margin-top: 0;
-    margin-bottom: 16px;
-  }
-}
 
 .title {
   box-sizing: border-box;
@@ -318,27 +148,6 @@ const getImage = (image) => {
   &--small {
     @include b-s18-h21;
   }
-}
-
-.ingredients__list {
-  @include clear-list;
-
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.ingredients__item {
-  width: 100px;
-  min-height: 40px;
-  margin-right: 17px;
-  margin-bottom: 35px;
-}
-
-.ingredients__counter {
-  width: 54px;
-  margin-top: 10px;
-  margin-left: 36px;
 }
 
 .radio {
@@ -544,116 +353,6 @@ const getImage = (image) => {
 
   &:focus {
     box-shadow: inset $shadow-regular;
-  }
-}
-
-.dough__input {
-  position: relative;
-
-  margin-right: 8%;
-  margin-bottom: 20px;
-  padding-left: 50px;
-
-  cursor: pointer;
-
-  img {
-    @include p_center-v;
-
-    width: 36px;
-    height: 36px;
-
-    transition: 0.3s;
-
-    border-radius: 50%;
-  }
-
-  b {
-    @include r-s16-h19;
-  }
-
-  span {
-    @include l-s11-h13;
-
-    display: block;
-  }
-
-  &:hover {
-    img {
-      box-shadow: $shadow-regular;
-    }
-  }
-
-  input {
-    &:checked + img {
-      box-shadow: $shadow-large;
-    }
-  }
-}
-
-.diameter__input {
-  margin-right: 8.7%;
-  margin-bottom: 20px;
-  padding-top: 7px;
-  padding-bottom: 6px;
-
-  cursor: pointer;
-
-  span {
-    @include r-s16-h19;
-
-    position: relative;
-
-    padding-left: 46px;
-
-    &::before {
-      @include p_center_v;
-
-      width: 36px;
-      height: 36px;
-
-      content: "";
-      transition: 0.3s;
-
-      border-radius: 50%;
-      background-color: $green-100;
-      background-image: url("@/assets/img/diameter.svg");
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
-
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
-
-  &--small {
-    span::before {
-      background-size: 18px;
-    }
-  }
-
-  &--normal {
-    span::before {
-      background-size: 29px;
-    }
-  }
-
-  &--big {
-    span::before {
-      background-size: 100%;
-    }
-  }
-
-  &:hover {
-    span::before {
-      box-shadow: $shadow-regular;
-    }
-  }
-
-  input {
-    &:checked + span::before {
-      box-shadow: $shadow-large;
-    }
   }
 }
 
