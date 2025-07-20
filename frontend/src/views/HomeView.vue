@@ -3,9 +3,15 @@
     <form action="#" method="post">
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
-        <DoughSelector/>
-        <DiameterSelector/>
-        <IngredientsSelector/>
+        <dough-selector
+          :doughItems="doughItems"
+          v-model="pizza.dough" />
+        <diameter-selector />
+        <ingredients-selector
+          :values="pizza.ingredients"
+          :items="ingredientItems"
+          @update="updateCount($event, ingredient, count)"
+        />
 
         <div class="content__pizza">
           <label class="input">
@@ -19,7 +25,8 @@
 
           <div class="content__constructor">
             <pizza-constructor
-              @drop="addIngredientOnPizza($event)"
+              :ingredients="pizza.ingredients"
+              @drop="addIngredient"
             />
           </div>
 
@@ -34,24 +41,33 @@
 </template>
 
 <script setup>
-import sizesJSON from "@/mocks/sizes.json";
-import saucesJSON from "@/mocks/sauces.json";
-import { getImage } from "@/common/helper";
-import {
-  normalizeSize,
-  normalizeSauce,
-  normalizeIngredient,
-} from "@/common/normalize";
 import PizzaConstructor from "../modules/constructor/PizzaConstructor.vue";
-import ingredients from "../common/data/ingredients";
 import DoughSelector from "../modules/constructor/DoughSelector.vue";
 import DiameterSelector from "@/modules/constructor/DiameterSelector.vue";
 import IngredientsSelector from "@/modules/constructor/IngredientsSelector.vue";
+import { reactive } from "vue";
+import ingredientsJSON from "@/mocks/ingredients.json";
+import { normalizeIngredient } from "@/common/normalize";
+const ingredientItems = ingredientsJSON.map(normalizeIngredient);
+import doughsJSON from "@/mocks/dough.json";
+import { normalizeDough } from "@/common/normalize";
 
-
-function addIngredientOnPizza(ingredient) {
-
+function updateCount($event, ingredient, count) {
+  console.log('ingredient');
+  console.log(ingredient);
+  pizza.ingredients[ingredient] = count;
 }
+
+const doughItems = doughsJSON.map(normalizeDough);
+const pizza = reactive({
+  dough: doughItems[0].value,
+  ingredients: ingredientItems.reduce((acc, item) => {
+    acc[item.value] = 0;
+    return acc;
+  }, {})
+})
+
+function addIngredient() {}
 </script>
 
 <style lang="scss">
@@ -131,8 +147,6 @@ function addIngredientOnPizza(ingredient) {
 
   border-top: 1px solid rgba($green-500, 0.1);
 }
-
-
 
 .title {
   box-sizing: border-box;

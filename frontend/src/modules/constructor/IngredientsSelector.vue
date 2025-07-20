@@ -1,26 +1,24 @@
 <template>
   <div class="content__ingredients">
     <div class="sheet">
-      <h2 class="title title--small sheet__title">
-        Выберите ингредиенты
-      </h2>
+      <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
 
       <div class="sheet__content ingredients">
-        <SauceSelector/>
+        <SauceSelector />
 
         <div class="ingredients__filling">
           <p>Начинка:</p>
 
           <ul class="ingredients__list">
             <li
-              v-for="ingredient in ingredientItems"
+              v-for="ingredient in items"
               :key="ingredient.id"
               class="ingredients__item"
             >
               <div :class="`filling filling--${ingredient.value}`">
                 <img
                   :src="getImage(ingredient.image)"
-                  alt="ingredient.name"
+                  :alt="`${ingredient.name}`"
                 />
                 {{ ingredient.name }}
               </div>
@@ -37,11 +35,12 @@
                   type="text"
                   name="counter"
                   class="counter__input"
-                  value="0"
+                  :value="getValue(ingredient.value)"
                 />
                 <button
                   type="button"
                   class="counter__button counter__button--plus"
+                  @click="incrementValue(ingredient.value)"
                 >
                   <span class="visually-hidden">Больше</span>
                 </button>
@@ -55,12 +54,40 @@
 </template>
 
 <script setup>
-import ingredientsJSON from "@/mocks/ingredients.json";
 import { getImage } from "@/common/helper";
 import SauceSelector from "@/modules/constructor/SauceSelector.vue";
-import { normalizeIngredient } from "@/common/normalize";
-const ingredientItems = ingredientsJSON.map(normalizeIngredient);
 
+const props = defineProps({
+  values: {
+    type: Array,
+    default: () => {},
+  },
+  items: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const incrementValue = (ingredient) => {
+  const oldCount = getValue(ingredient);
+  const newCount = oldCount + 1;
+  // setValue(ingredientId, newCount);
+  emit("update", ingredient, newCount);
+};
+
+function getValue(ingredient) {
+  return props.values[ingredient];
+}
+
+/*function setValue(id, count) {
+  props.values.map((elem) => {
+    if (elem.id === id) {
+      return elem.count;
+    }
+  })
+}*/
+
+const emit = defineEmits(["update"]);
 </script>
 
 <style scoped lang="scss">

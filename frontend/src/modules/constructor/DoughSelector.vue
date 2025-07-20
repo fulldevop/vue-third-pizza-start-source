@@ -12,9 +12,10 @@
           <input
             type="radio"
             name="dough"
-            value="light"
+            :value="`${dough.value}`"
+            @click="$emit('updateDough', dough.value)"
             class="visually-hidden"
-            checked
+
           />
           <img :src="getImage(dough.image)" :alt="dough.name" />
           <b>{{ dough.name }}</b>
@@ -26,12 +27,16 @@
 </template>
 
 <script setup>
-import doughsJSON from "@/mocks/dough.json";
-import { normalizeDough } from "@/common/normalize";
 import { getImage } from "@/common/helper";
 
-const doughItems = doughsJSON.map(normalizeDough);
+const props = defineProps({
+  doughItems: {
+    type: Array,
+    default: () => []
+  }
+})
 
+defineEmits(['updateDough'])
 </script>
 
 <style scoped lang="scss">
