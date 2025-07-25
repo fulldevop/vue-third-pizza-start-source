@@ -5,8 +5,14 @@
         <h1 class="title title--big">Конструктор пиццы</h1>
         <dough-selector
           :doughItems="doughItems"
-          v-model="pizza.dough" />
-        <diameter-selector />
+          v-model="pizza.dough"
+        />
+        <diameter-selector
+          :sizeItems="sizeItems"
+          v-model="pizza.size"
+        />
+<!--        @updateSize-->
+
         <ingredients-selector
           :values="pizza.ingredients"
           :items="ingredientItems"
@@ -52,21 +58,27 @@ const ingredientItems = ingredientsJSON.map(normalizeIngredient);
 import doughsJSON from "@/mocks/dough.json";
 import { normalizeDough } from "@/common/normalize";
 
+import sizesJSON from "@/mocks/sizes.json";
+import { normalizeSize } from "@/common/normalize";
+
+const sizeItems = sizesJSON.map(normalizeSize);
+
 function updateCount($event, ingredient, count) {
-  console.log('ingredient');
-  console.log(ingredient);
   pizza.ingredients[ingredient] = count;
 }
 
 const doughItems = doughsJSON.map(normalizeDough);
 const pizza = reactive({
   dough: doughItems[0].value,
+  size:sizeItems[0].value,
   ingredients: ingredientItems.reduce((acc, item) => {
     acc[item.value] = 0;
     return acc;
   }, {})
 })
 
+console.log('pizza');
+console.log(pizza);
 function addIngredient() {}
 </script>
 

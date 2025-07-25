@@ -13,8 +13,10 @@
             type="radio"
             name="diameter"
             :value="size.value"
+            :checked="sizePizza === size.value"
             class="visually-hidden"
           />
+          <!--            @click="$emit('updateSize')"-->
           <span>{{ size.name }}</span>
         </label>
       </div>
@@ -23,10 +25,16 @@
 </template>
 
 <script setup>
-import sizesJSON from "@/mocks/sizes.json";
-import { normalizeSize } from "@/common/normalize";
+const props = defineProps({
+  sizeItems: {
+    type: Array,
+    default: () => []
+  }
+})
 
-const sizeItems = sizesJSON.map(normalizeSize);
+const sizePizza = defineModel();
+
+defineEmits(['updateSize'])
 </script>
 
 <style scoped lang="scss">
