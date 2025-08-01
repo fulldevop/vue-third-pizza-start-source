@@ -12,10 +12,9 @@
           <input
             type="radio"
             name="dough"
-            :value="`${dough.value}`"
-            @click="$emit('updateDough', dough.value)"
+            v-model="modelValue"
+            :value="dough.value"
             class="visually-hidden"
-
           />
           <img :src="getImage(dough.image)" :alt="dough.name" />
           <b>{{ dough.name }}</b>
@@ -36,7 +35,9 @@ const props = defineProps({
   }
 })
 
-defineEmits(['updateDough'])
+
+const modelValue = defineModel();
+
 </script>
 
 <style scoped lang="scss">

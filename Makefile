@@ -39,3 +39,6 @@ install_root_dependencies:
 	npm ci; echo "...Installing root dependencies"
 
 install_dependencies: install_backend_dependencies install_frontend_dependencies install_template_dependencies install_root_dependencies
+
+stop:
+	docker stop vue-pizza-backend-1; docker stop vue-pizza-db-1; docker stop vue-pizza-frontend-1

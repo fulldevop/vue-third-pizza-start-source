@@ -11,8 +11,6 @@
           :sizeItems="sizeItems"
           v-model="pizza.size"
         />
-<!--        @updateSize-->
-
         <ingredients-selector
           :values="pizza.ingredients"
           :items="ingredientItems"
@@ -31,7 +29,8 @@
 
           <div class="content__constructor">
             <pizza-constructor
-              :ingredients="pizza.ingredients"
+              v-model="pizza"
+
               @drop="addIngredient"
             />
           </div>
@@ -63,13 +62,13 @@ import { normalizeSize } from "@/common/normalize";
 
 const sizeItems = sizesJSON.map(normalizeSize);
 
-function updateCount($event, ingredient, count) {
-  pizza.ingredients[ingredient] = count;
+function update($event) {
+  //
 }
 
 const doughItems = doughsJSON.map(normalizeDough);
 const pizza = reactive({
-  dough: doughItems[0].value,
+  dough: doughItems[1].value,
   size:sizeItems[0].value,
   ingredients: ingredientItems.reduce((acc, item) => {
     acc[item.value] = 0;
@@ -77,8 +76,6 @@ const pizza = reactive({
   }, {})
 })
 
-console.log('pizza');
-console.log(pizza);
 function addIngredient() {}
 </script>
 
@@ -509,35 +506,6 @@ function addIngredient() {}
   &--white {
     background-color: $white;
     color: $green-500;
-  }
-}
-
-.pizza {
-  position: relative;
-
-  display: block;
-
-  box-sizing: border-box;
-  width: 100%;
-
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-
-  &--foundation--big-creamy {
-    background-image: url("@/assets/img/foundation/big-creamy.svg");
-  }
-
-  &--foundation--big-tomato {
-    background-image: url("@/assets/img/foundation/big-tomato.svg");
-  }
-
-  &--foundation--small-creamy {
-    background-image: url("@/assets/img/foundation/small-creamy.svg");
-  }
-
-  &--foundation--small-tomato {
-    background-image: url("@/assets/img/foundation/small-tomato.svg");
   }
 }
 

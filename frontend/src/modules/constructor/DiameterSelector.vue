@@ -13,10 +13,9 @@
             type="radio"
             name="diameter"
             :value="size.value"
-            :checked="sizePizza === size.value"
+            :checked="modelValue === size.value"
             class="visually-hidden"
           />
-          <!--            @click="$emit('updateSize')"-->
           <span>{{ size.name }}</span>
         </label>
       </div>
@@ -32,9 +31,7 @@ const props = defineProps({
   }
 })
 
-const sizePizza = defineModel();
-
-defineEmits(['updateSize'])
+const modelValue = defineModel();
 </script>
 
 <style scoped lang="scss">
