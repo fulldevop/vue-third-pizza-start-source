@@ -1,10 +1,4 @@
 <template>
-  <div class="content__ingredients">
-    <div class="sheet">
-      <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
-
-      <div class="sheet__content ingredients">
-        <SauceSelector />
 
         <div class="ingredients__filling">
           <p>Начинка:</p>
@@ -48,14 +42,10 @@
             </li>
           </ul>
         </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
 import { getImage } from "@/common/helper";
-import SauceSelector from "@/modules/constructor/SauceSelector.vue";
 
 const props = defineProps({
   values: {
@@ -68,6 +58,8 @@ const props = defineProps({
   },
 });
 
+// const modelValue = defineModel();
+
 const incrementValue = (ingredient) => {
   const oldCount = getValue(ingredient);
   const newCount = oldCount + 1;
@@ -79,44 +71,12 @@ function getValue(ingredient) {
   return props.values[ingredient];
 }
 
-/*function setValue(id, count) {
-  props.values.map((elem) => {
-    if (elem.id === id) {
-      return elem.count;
-    }
-  })
-}*/
-
 const emit = defineEmits(["update"]);
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/scss/ds-system/ds.scss";
 @import "@/assets/scss/mixins/mixins.scss";
-
-.content__ingredients {
-  width: 527px;
-  margin-top: 15px;
-  margin-right: auto;
-  margin-bottom: 15px;
-}
-
-.ingredients__sauce {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  width: 100%;
-  margin-bottom: 14px;
-
-  p {
-    @include r-s16-h19;
-
-    margin-top: 0;
-    margin-right: 16px;
-    margin-bottom: 10px;
-  }
-}
 
 .ingredients__input {
   margin-right: 24px;

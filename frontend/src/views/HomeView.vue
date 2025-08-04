@@ -11,11 +11,24 @@
           :sizeItems="sizeItems"
           v-model="pizza.size"
         />
-        <ingredients-selector
-          :values="pizza.ingredients"
-          :items="ingredientItems"
-          @update="updateCount($event, ingredient, count)"
-        />
+
+        <div class="content__ingredients">
+          <div class="sheet">
+            <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
+
+            <div class="sheet__content ingredients">
+              <sauce-selector
+                  :sauceItems="sauceItems"
+                  v-model="pizza.sauce"
+              />
+              <ingredients-selector
+                :values="pizza.ingredients"
+                :items="ingredientItems"
+                v-model="pizza.ingredients"
+              />
+            </div>
+          </div>
+        </div>
 
         <div class="content__pizza">
           <label class="input">
@@ -30,7 +43,6 @@
           <div class="content__constructor">
             <pizza-constructor
               v-model="pizza"
-
               @drop="addIngredient"
             />
           </div>
@@ -49,27 +61,25 @@
 import PizzaConstructor from "../modules/constructor/PizzaConstructor.vue";
 import DoughSelector from "../modules/constructor/DoughSelector.vue";
 import DiameterSelector from "@/modules/constructor/DiameterSelector.vue";
+import SauceSelector from "@/modules/constructor/SauceSelector.vue";
 import IngredientsSelector from "@/modules/constructor/IngredientsSelector.vue";
+import sizesJSON from "@/mocks/sizes.json";
+import saucesJSON from "@/mocks/sauces.json";
 import { reactive } from "vue";
 import ingredientsJSON from "@/mocks/ingredients.json";
-import { normalizeIngredient } from "@/common/normalize";
+import { normalizeIngredient, normalizeSauce, normalizeDough, normalizeSize }
+  from "@/common/normalize";
 const ingredientItems = ingredientsJSON.map(normalizeIngredient);
+const sauceItems = saucesJSON.map(normalizeSauce);
 import doughsJSON from "@/mocks/dough.json";
-import { normalizeDough } from "@/common/normalize";
-
-import sizesJSON from "@/mocks/sizes.json";
-import { normalizeSize } from "@/common/normalize";
 
 const sizeItems = sizesJSON.map(normalizeSize);
 
-function update($event) {
-  //
-}
-
 const doughItems = doughsJSON.map(normalizeDough);
 const pizza = reactive({
-  dough: doughItems[1].value,
+  dough: doughItems[0].value,
   size:sizeItems[0].value,
+  sauce:sauceItems[0].value,
   ingredients: ingredientItems.reduce((acc, item) => {
     acc[item.value] = 0;
     return acc;
@@ -129,6 +139,13 @@ function addIngredient() {}
     margin-left: 12px;
     padding: 16px 45px;
   }
+}
+
+.content__ingredients {
+  width: 527px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-bottom: 15px;
 }
 
 .sheet {

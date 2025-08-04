@@ -13,7 +13,7 @@
             type="radio"
             name="diameter"
             :value="size.value"
-            :checked="modelValue === size.value"
+            v-model="modelValue"
             class="visually-hidden"
           />
           <span>{{ size.name }}</span>

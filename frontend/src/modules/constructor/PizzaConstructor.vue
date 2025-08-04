@@ -1,7 +1,6 @@
 <template>
   <app-drop>
-    {{ modelValue.dough }}
-    <div :class="`pizza pizza--foundation--${modelValue.dough}-tomato`">
+    <div :class="`pizza pizza--foundation--${modelValue.dough}-${modelValue.sauce}`">
       <div class="pizza__wrapper">
         <template v-for="(value, key, index) in modelValue.ingredients"
                   :key="index">
@@ -17,8 +16,6 @@
 import AppDrop from "@/common/components/AppDrop.vue";
 
 const modelValue = defineModel();
-console.log(modelValue);
-
 defineEmits(['drop'])
 </script>
 
