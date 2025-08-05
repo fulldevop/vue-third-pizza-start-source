@@ -5,7 +5,9 @@
         <template v-for="(value, key, index) in modelValue.ingredients"
                   :key="index">
           <div v-if="value !== 0"
-               :class="`pizza__filling pizza__filling--${key}`"></div>
+               :class="[`pizza__filling pizza__filling--${key}`, { 'pizza__filling--second': value === 2,
+               'pizza__filling--third': value === 3 }]"
+          ></div>
         </template>
       </div>
     </div>

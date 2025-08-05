@@ -5,7 +5,7 @@
 
           <ul class="ingredients__list">
             <li
-              v-for="ingredient in items"
+              v-for="ingredient in ingredientItems"
               :key="ingredient.id"
               class="ingredients__item"
             >
@@ -21,7 +21,8 @@
                 <button
                   type="button"
                   class="counter__button counter__button--minus"
-                  disabled
+                  @click="modelValue[ingredient.value]--"
+                  :disabled="modelValue[ingredient.value] === 0"
                 >
                   <span class="visually-hidden">Меньше</span>
                 </button>
@@ -29,12 +30,13 @@
                   type="text"
                   name="counter"
                   class="counter__input"
-                  :value="getValue(ingredient.value)"
+                  v-model="modelValue[ingredient.value]"
                 />
                 <button
                   type="button"
                   class="counter__button counter__button--plus"
-                  @click="incrementValue(ingredient.value)"
+                  @click="modelValue[ingredient.value]++"
+                  :disabled="modelValue[ingredient.value] === 3"
                 >
                   <span class="visually-hidden">Больше</span>
                 </button>
@@ -48,17 +50,13 @@
 import { getImage } from "@/common/helper";
 
 const props = defineProps({
-  values: {
-    type: Array,
-    default: () => {},
-  },
-  items: {
+  ingredientItems: {
     type: Array,
     default: () => [],
   },
 });
 
-// const modelValue = defineModel();
+const modelValue = defineModel();
 
 const incrementValue = (ingredient) => {
   const oldCount = getValue(ingredient);

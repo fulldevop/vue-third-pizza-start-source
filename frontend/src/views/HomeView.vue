@@ -22,8 +22,7 @@
                   v-model="pizza.sauce"
               />
               <ingredients-selector
-                :values="pizza.ingredients"
-                :items="ingredientItems"
+                :ingredientItems="ingredientItems"
                 v-model="pizza.ingredients"
               />
             </div>
